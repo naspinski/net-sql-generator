@@ -5,12 +5,11 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <h2><%: ViewData["Message"] %></h2>
-
+    <h2><%= ViewData["query"] %></h2>
+    <h3>affected rows: <%= ViewData["output"] %></h3>
+    <h4>resulting table:</h4>
+    <%= ViewData["table"] %>
     
-    <h2>PgSqlGeneratorTest</h2>
-    <h3>Table Names</h3>
-    <% foreach (string s in Model.TableNames) { %>
-            <%= s %><br />
-    <% }  %>
+
+
 </asp:Content>

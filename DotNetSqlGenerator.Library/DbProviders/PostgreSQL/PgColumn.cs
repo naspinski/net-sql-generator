@@ -13,9 +13,11 @@ namespace DotNetPostgresSqlGenerator.Library.DbProviders.PostgreSQL
     {
         public NpgsqlDbType PgType { get; private set; }
 
-        public PgColumn(string name, string datatype)
-            : base(name, datatype)
+        public PgColumn(IDataReader reader)
+            : base(reader[0].ToString(), reader[1].ToString())
         {
+            if (!reader[2].ToString().Trim().Equals("t")) NotNull = false;
+
             switch(this.SqlType)
             {
                 case SqlDbType.Int: PgType = NpgsqlDbType.Integer; break;
@@ -23,7 +25,6 @@ namespace DotNetPostgresSqlGenerator.Library.DbProviders.PostgreSQL
                 case SqlDbType.Date: PgType = NpgsqlDbType.Date; break;
                 default: throw new Exception("error with SQL > PgSQL data type conversion");
             }
-
         }
     }
 }

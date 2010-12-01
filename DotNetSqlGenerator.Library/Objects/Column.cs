@@ -11,7 +11,7 @@ namespace DotNetSqlGenerator.Library.Objects
         public string Name {get; private set;}
         public SqlDbType SqlType { get; private set; }
         public Type DotNetType { get; private set; }
-        public bool Nullable { get; private set; }
+        public bool NotNull { get; protected set; }
         public int Limit { get; private set; }
 
         //remove
@@ -19,6 +19,7 @@ namespace DotNetSqlGenerator.Library.Objects
 
         public Column(string name, string datatype)
         {
+            NotNull = true;
             TestData = "?";
             Limit = -1;
             Name = name;

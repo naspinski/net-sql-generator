@@ -14,26 +14,29 @@ namespace DotNetSqlGenerator.WebUI.Controllers
     {
         public ActionResult Index()
         {
-            string query = "SELECT a.attname as \"Column\", pg_catalog.format_type(a.atttypid, a.atttypmod) as \"Datatype\" " +
-                            "FROM pg_catalog.pg_attribute a " +
-                            "WHERE a.attnum > 0 AND NOT a.attisdropped AND a.attrelid = (" +
-                                "SELECT c.oid FROM pg_catalog.pg_class c " +
-                                    "LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace " +
-                                "WHERE c.relname ~ '^(people)$' AND pg_catalog.pg_table_is_visible(c.oid));";
-
             PgSqlGenerator pg = new PgSqlGenerator("127.0.0.1", 5432, "postgres", "sql", "testing");
-            var reader = pg.RunReader(query);
-            var columns = pg.GetColumns("people");
-            string o = string.Empty;
+            
             var people = pg.GetTable("people");
+            //string query = GenerateSql.Insert.For(people);
+            string query = GenerateSql.Select.For(people, pg.GetSingleRandomRecordFrom(people), 2, 3);
+            ViewData["query"] = query;
 
-            foreach (Column c in people.Columns)
-                o += c.Name + " - " + c.SqlType.ToString() + " - " + c.DotNetType.ToString() + " - " + c.Limit + " | ";
+            //pg.RunNonQuery("DELETE FROM people WHERE id <> 11;");
+            //int inserted = pg.RunNonQuery(query);
+
+            //ViewData["output"] = inserted.ToString();
+
+            string show = "";
+            var reader = pg.RunReader("SELECT * FROM people");
             //while (reader.Read())
-            //    o += reader[1].ToString() + " - ";
-            
-            
-            ViewData["Message"] = Generate.String() + "<br />" + Generate.Date().ToShortDateString();
+            //    show += reader["id"] + " | " + reader["name"] + "<br />";
+
+            show += "<h2>single random record</h2>";
+
+            foreach(object o in pg.GetSingleRandomRecordFrom(people))
+                show += o.ToString() + "<br />";
+
+            ViewData["table"] = show;
 
             return View(pg);
         }
