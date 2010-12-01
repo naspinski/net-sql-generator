@@ -65,7 +65,10 @@ namespace DotNetPostgresSqlGenerator.Library
                     }
                 }
 
-                sql.Append("SELECT " + select.ToString() + " FROM " + T.Name + " WHERE " + where.ToString() + ";");
+
+                string sel = select.ToString();
+                if (sel.EndsWith(", ")) sel = sel.Substring(0, sel.Length - 2);
+                sql.Append("SELECT " + sel + " FROM " + T.Name + " WHERE " + where.ToString() + ";");
                 return sql.ToString();
             }
         }

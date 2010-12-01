@@ -18,9 +18,9 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
 
         protected NpgsqlConnection Connection;
 
-        public PgSqlGenerator(string server, int port, string user, string password, string database)
+        public PgSqlGenerator(string server, int port, string user, string password, string database, string options = "")
         {
-            ConnectionString = "Server=" + server + ";Port=" + port + ";User Id=" + user + ";Password=" + password + ";Database=" + database + ";";
+            ConnectionString = "Server=" + server + ";Port=" + port + ";User Id=" + user + ";Password=" + password + ";Database=" + database + ";" + options;
             Initialize();
         }
 

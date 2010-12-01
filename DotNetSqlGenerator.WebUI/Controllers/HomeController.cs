@@ -15,35 +15,39 @@ namespace DotNetSqlGenerator.WebUI.Controllers
         public ActionResult Index()
         {
             PgSqlGenerator pg = new PgSqlGenerator("127.0.0.1", 5432, "postgres", "sql", "testing");
-            
-            var people = pg.GetTable("people");
-            //string query = GenerateSql.Insert.For(people);
-            string query = GenerateSql.Select.For(people, pg.GetSingleRandomRecordFrom(people), 2, 3);
-            ViewData["query"] = query;
 
-            //pg.RunNonQuery("DELETE FROM people WHERE id <> 11;");
-            //int inserted = pg.RunNonQuery(query);
+            try
+            {
+                var people = pg.GetTable("people");
+                //string query = GenerateSql.Insert.For(people);
+                string query = GenerateSql.Select.For(people, pg.GetSingleRandomRecordFrom(people), 2, 3);
+                ViewData["query"] = query;
 
-            //ViewData["output"] = inserted.ToString();
+                //pg.RunNonQuery("DELETE FROM people WHERE id <> 11;");
+                //int inserted = pg.RunNonQuery(query);
 
-            string show = "";
-            var reader = pg.RunReader("SELECT * FROM people");
-            //while (reader.Read())
-            //    show += reader["id"] + " | " + reader["name"] + "<br />";
+                //ViewData["output"] = inserted.ToString();
 
-            show += "<h2>single random record</h2>";
+                string show = "";
+                var reader = pg.RunReader("SELECT * FROM people");
+                //while (reader.Read())
+                //    show += reader["id"] + " | " + reader["name"] + "<br />";
 
-            foreach(object o in pg.GetSingleRandomRecordFrom(people))
-                show += o.ToString() + "<br />";
+                show += "<h2>single random record</h2>";
 
-            ViewData["table"] = show;
+                foreach (object o in pg.GetSingleRandomRecordFrom(people))
+                    show += o.ToString() + "<br />";
+
+                ViewData["table"] = show;
+            }
+            finally { pg.Dispose(); }
 
             return View(pg);
         }
 
         public ActionResult GeneratorTest()
         {
-            return View(new PgSqlGenerator("127.0.0.1", 5432, "postgres", "sql", "testing"));
+            return View(new PgSqlGenerator("127.0.0.1", 5432, "postgres", "sql", "testing", "MINPOOLSIZE=20;MAXPOOLSIZE=50;"));
         }
 
         public ActionResult Fields(string id)
