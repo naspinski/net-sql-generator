@@ -7,12 +7,23 @@ using DotNetSqlGenerator.Library.DbProviders.PostgreSQL;
 
 namespace DotNetPostgresSqlGenerator.Library
 {
+    /// <summary>
+    /// Generates generic T-SQL statements for all T-SQL compliant DBMSs
+    /// </summary>
     public static class GenerateSql
     {
-        public static Type[] UnQuotedTypes = new Type[] { typeof(int), typeof(double), typeof(float), typeof(bool) }; 
+        public static Type[] UnQuotedTypes = new Type[] { typeof(int), typeof(double), typeof(float), typeof(bool) };
+
+        #region Generators
 
         public static class Delete
         {
+            /// <summary>
+            /// Makes a SQL delete statement to delete a random record - guaranteed to delete at least one record
+            /// </summary>
+            /// <param name="T">table to delete from</param>
+            /// <param name="pg">PgSqlGenerator to run the queries</param>
+            /// <returns>SQL Query</returns>
             public static string For(Table T, PgSqlGenerator pg)
             {
                 IEnumerable<object> singleRandomRecord = pg.GetSingleRandomRecordFrom(T);
@@ -27,6 +38,12 @@ namespace DotNetPostgresSqlGenerator.Library
 
         public static class Update
         {
+            /// <summary>
+            /// Makes a SQL update statement to update every field of a table entry, guaranteed to update at least one
+            /// </summary>
+            /// <param name="T">table to update</param>
+            /// <param name="pg">PgSqlGenerator to run the queries</param>
+            /// <returns>SQL Query</returns>
             public static string For(Table T, PgSqlGenerator pg)
             {
                 IEnumerable<object> singleRandomRecord = pg.GetSingleRandomRecordFrom(T);
@@ -35,7 +52,7 @@ namespace DotNetPostgresSqlGenerator.Library
                 string[] insertSet = CreateInsertSetFor(T);
                 StringBuilder sql = new StringBuilder("UPDATE " + T.Name + " SET ");
                 Column c;
-                
+
                 for (int i = 0; i < T.Columns.Count(); i++)
                 {
                     c = T.Columns.Skip(i).First();
@@ -51,6 +68,14 @@ namespace DotNetPostgresSqlGenerator.Library
 
         public static class Select
         {
+            /// <summary>
+            /// Creates a SQL select statement for random record (or bunch of them), guaranteed to return at least one record
+            /// </summary>
+            /// <param name="T">table to select from</param>
+            /// <param name="pg">PgSqlGenerator to run the queries</param>
+            /// <param name="numberOfColumnsToReturn">[optional] how many columns will be included in the SELECT</param>
+            /// <param name="numberOfColumnsToSearch">[optional] how many columns will be included in the WHERE</param>
+            /// <returns>SQL Query</returns>
             public static string For(Table T, PgSqlGenerator pg, int numberOfColumnsToReturn = -1, int numberOfColumnsToSearch = -1)
             {
                 IEnumerable<object> singleRandomRecord = pg.GetSingleRandomRecordFrom(T);
@@ -58,7 +83,7 @@ namespace DotNetPostgresSqlGenerator.Library
                 StringBuilder sql = new StringBuilder(), select = new StringBuilder(), where = new StringBuilder();
                 Random rand = new Random();
                 int r;
-                
+
                 while (numberOfColumnsToReturn < WHERE_LIMITER) WHERE_LIMITER--;
                 if (numberOfColumnsToSearch < 1) numberOfColumnsToSearch = rand.Next(WHERE_LIMITER, numberOfColumnsToReturn) / WHERE_LIMITER; //search at most 1/WHERE_LIMITER of attributes
                 if (numberOfColumnsToSearch < 1) numberOfColumnsToSearch = 1;
@@ -106,10 +131,10 @@ namespace DotNetPostgresSqlGenerator.Library
         public static class Insert
         {
             /// <summary>
-            /// returns an insert query for Table T
+            /// Creates an insert query for Table T
             /// </summary>
             /// <param name="T">Table to make query for</param>
-            /// <returns>an string insert query for T</returns>
+            /// <returns>SQL Query</returns>
             public static string For(Table T)
             {
                 string[] insertSet = CreateInsertSetFor(T);
@@ -118,11 +143,11 @@ namespace DotNetPostgresSqlGenerator.Library
             }
 
             /// <summary>
-            /// returns multiple insert queries
+            /// Creates multiple insert queries
             /// </summary>
             /// <param name="T">Table to make queries for</param>
             /// <param name="howMany">number of queries to make</param>
-            /// <returns>an IEnumerable of strings which are insert queries for T</returns>
+            /// <returns>SQL Query</returns>
             public static IEnumerable<string> For(Table T, int howMany)
             {
                 if (howMany < 1) throw new Exception("howMany in GenerateSql.Insert.For cannot be lower than 1");
@@ -131,6 +156,12 @@ namespace DotNetPostgresSqlGenerator.Library
                 return queries;
             }
 
+            /// <summary>
+            /// Creates a bulk insert statement
+            /// </summary>
+            /// <param name="T">table to insert to</param>
+            /// <param name="howMany">how many inserts</param>
+            /// <returns>SQL Query</returns>
             public static string BulkFor(Table T, int howMany)
             {
                 if (howMany < 1) throw new Exception("howMany in GenerateSql.Insert.BulkFor cannot be lower than 1");
@@ -146,7 +177,15 @@ namespace DotNetPostgresSqlGenerator.Library
             }
 
         }
+        #endregion
 
+        #region Utilities
+
+        /// <summary>
+        /// Creates a 2 element array, first one is the column names, and the second is the random values for them (comma delimited)
+        /// </summary>
+        /// <param name="T">Table to create from</param>
+        /// <returns>2 elements array [names][random values]</returns>
         private static string[] CreateInsertSetFor(Table T)
         {
             StringBuilder fields = new StringBuilder(), values = new StringBuilder();
@@ -161,10 +200,18 @@ namespace DotNetPostgresSqlGenerator.Library
             return new string[] { fields.ToString(), values.ToString() };
         }
 
+        /// <summary>
+        /// Quotes the string s if necessary depening on column type
+        /// </summary>
+        /// <param name="s">value to insert into query</param>
+        /// <param name="c">column where value is destined</param>
+        /// <returns>quotes string if necessary, s if not</returns>
         public static string Quote(string s, Column c)
         {
             if (UnQuotedTypes.Contains(c.DotNetType)) return s;
             return "'" + s + "'";
         }
+
+        #endregion
     }
 }
