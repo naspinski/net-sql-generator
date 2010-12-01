@@ -16,9 +16,11 @@ namespace DotNetSqlGenerator.Library
 
         #region Properties_Initializers
 
+        protected IDbConnection Connection;
+        protected string ConnectionString;
         public DbProvider DatabaseProvider;
 
-        public SqlGenerator(){}
+        public SqlGenerator() { }
 
         #endregion Properties_Initializers
 
@@ -26,6 +28,11 @@ namespace DotNetSqlGenerator.Library
 
         public void GenerateTable(int columns)
         {
+        }
+
+        public void Dispose()
+        {
+            Connection.Dispose();
         }
 
         #endregion Generators

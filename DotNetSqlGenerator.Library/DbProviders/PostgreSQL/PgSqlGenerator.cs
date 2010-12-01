@@ -7,6 +7,7 @@ using DotNetSqlGenerator.Library.Interfaces;
 using System.Data;
 using NpgsqlTypes;
 using DotNetSqlGenerator.Library.Objects;
+using DotNetPostgresSqlGenerator.Library.DbProviders.PostgreSQL;
 
 namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
 {
@@ -15,9 +16,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         #region Properties_Initializers
         public IEnumerable<string> TableNames { get; private set; }
 
-        protected string ConnectionString;
         protected NpgsqlConnection Connection;
-        
 
         public PgSqlGenerator(string server, int port, string user, string password, string database)
         {
@@ -69,9 +68,9 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
 
         #endregion General_Methods
 
-        public IEnumerable<Column> GetColumns(string tablename)
+        public IEnumerable<PgColumn> GetColumns(string tablename)
         {
-            List<Column> columns = new List<Column>();
+            List<PgColumn> columns = new List<PgColumn>();
             string query = "SELECT a.attname as \"Column\", pg_catalog.format_type(a.atttypid, a.atttypmod) as \"Datatype\" " +
                             "FROM pg_catalog.pg_attribute a " +
                             "WHERE a.attnum > 0 AND NOT a.attisdropped AND a.attrelid = (" +
@@ -80,7 +79,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
                                 "WHERE c.relname ~ '^(" + tablename.ToLower() + ")$' AND pg_catalog.pg_table_is_visible(c.oid));";
             IDataReader reader = RunReader(CreateCommand(query), Connection);
             while (reader.Read())
-                columns.Add(new Column(reader[0].ToString(), reader[1].ToString()));
+                columns.Add(new PgColumn(reader[0].ToString(), reader[1].ToString()));
             return columns;
         }
 

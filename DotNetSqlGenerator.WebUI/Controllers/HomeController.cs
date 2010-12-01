@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using DotNetSqlGenerator.Library.DbProviders.PostgreSQL;
 using DotNetSqlGenerator.Library.Objects;
+using DotNetPostgresSqlGenerator.Library;
 
 namespace DotNetSqlGenerator.WebUI.Controllers
 {
@@ -24,14 +25,15 @@ namespace DotNetSqlGenerator.WebUI.Controllers
             var reader = pg.RunReader(query);
             var columns = pg.GetColumns("people");
             string o = string.Empty;
+            var people = pg.GetTable("people");
 
-            foreach (Column c in columns)
+            foreach (Column c in people.Columns)
                 o += c.Name + " - " + c.SqlType.ToString() + " - " + c.DotNetType.ToString() + " - " + c.Limit + " | ";
             //while (reader.Read())
             //    o += reader[1].ToString() + " - ";
             
             
-            ViewData["Message"] = o;
+            ViewData["Message"] = Generate.String() + "<br />" + Generate.Date().ToShortDateString();
 
             return View(pg);
         }
