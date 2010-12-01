@@ -21,15 +21,7 @@ namespace DotNetSqlGenerator.Library
         public DbProvider DatabaseProvider;
 
         public SqlGenerator() { }
-
-        #endregion Properties_Initializers
-
-        #region Generators
-
-        public void GenerateTable(int columns)
-        {
-        }
-
+        
         public void Dispose()
         {
             Connection.Dispose();
@@ -39,6 +31,12 @@ namespace DotNetSqlGenerator.Library
 
         #region General_Methods
 
+        /// <summary>
+        /// Runs a query that does not return anything
+        /// </summary>
+        /// <param name="command">Command to run</param>
+        /// <param name="connection">SQL Connection</param>
+        /// <returns>number of records affected</returns>
         public int RunNonQuery(IDbCommand command, IDbConnection connection)
         {
             int rowsAffected = -1;
@@ -54,6 +52,12 @@ namespace DotNetSqlGenerator.Library
             return rowsAffected;
         }
 
+        /// <summary>
+        /// Runs a query that returns records
+        /// </summary>
+        /// <param name="command">Command to run</param>
+        /// <param name="connection">SQL Connection</param>
+        /// <returns>reader with records</returns>
         public IDataReader RunReader(IDbCommand command, IDbConnection connection)
         {
             IDataReader reader = null;
@@ -69,6 +73,12 @@ namespace DotNetSqlGenerator.Library
             return reader;
         }
 
+        /// <summary>
+        /// Runs a query with a scalar results such as COUNT(*), etc.
+        /// </summary>
+        /// <param name="command">Command to run</param>
+        /// <param name="connection">SQL Connection</param>
+        /// <returns>Scalar answer to query</returns>
         public object RunScalar(IDbCommand command, IDbConnection connection)
         {
             object column = -1;

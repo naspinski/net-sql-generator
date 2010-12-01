@@ -8,6 +8,9 @@ using Npgsql;
 
 namespace DotNetSqlGenerator.Library.Objects
 {
+    /// <summary>
+    /// Holds information about the table, including the columns and name
+    /// </summary>
     public class Table
     {
         public IEnumerable<Column> Columns { get; private set; }
@@ -19,7 +22,6 @@ namespace DotNetSqlGenerator.Library.Objects
             Name = tablename;
             Columns = GetColumns(pg, tablename);
         }
-
 
         private IEnumerable<PgColumn> GetColumns(PgSqlGenerator pg, string tablename)
         {

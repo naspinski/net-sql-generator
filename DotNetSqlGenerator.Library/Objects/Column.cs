@@ -6,6 +6,9 @@ using System.Data;
 
 namespace DotNetSqlGenerator.Library.Objects
 {
+    /// <summary>
+    /// Holds information about a column, such as data types, name, limit and if it is nullable or not
+    /// </summary>
     public class Column
     {
         public string Name {get; private set;}

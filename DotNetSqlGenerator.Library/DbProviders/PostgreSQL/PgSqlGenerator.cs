@@ -50,18 +50,33 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
 
         #region General_Methods
 
+        /// <summary>
+        /// Runs a query that does not return anything
+        /// </summary>
+        /// <param name="query">sql query to run</param>
+        /// <returns>number of records affected</returns>
         public int RunNonQuery(string query)
         {
             Connection = new Npgsql.NpgsqlConnection(ConnectionString);
             return RunNonQuery(CreateCommand(query), Connection);
         }
 
+        /// <summary>
+        /// Runs a query that returns records
+        /// </summary>
+        /// <param name="query">sql query to run</param>
+        /// <returns>reader with records</returns>
         public NpgsqlDataReader RunReader(string query)
         {
             Connection = new Npgsql.NpgsqlConnection(ConnectionString);
             return (NpgsqlDataReader)RunReader(CreateCommand(query), Connection);
         }
 
+        /// <summary>
+        /// Runs a query with a scalar results such as COUNT(*), etc.
+        /// </summary>
+        /// <param name="query">sql query to run</param>
+        /// <returns>Scalar answer to query</returns>
         public object RunScalar(string query)
         {
             Connection = new Npgsql.NpgsqlConnection(ConnectionString);
@@ -69,7 +84,12 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         }
 
         #endregion General_Methods
-        
+
+        #region Population
+        /// <summary>
+        /// Gets all the public tables in the database, for use in passing to GetTable()
+        /// </summary>
+        /// <returns>List of strings that are teh table names</returns>
         private IEnumerable<string> GetTableNames()
         {
             List<string> tableNames = new List<string>();
@@ -91,11 +111,22 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
             return tableNames;
         }
 
+        /// <summary>
+        /// Getsa table with all the information (name, columns, etc.)
+        /// </summary>
+        /// <param name="tablename">name of table to get</param>
+        /// <returns>Table requested</returns>
         public Table GetTable(string tablename)
         {
             return new Table(this, tablename);
         }
 
+        /// <summary>
+        /// Just pulls a random recod from the table
+        /// This is required to make sure the queries return at least a single response
+        /// </summary>
+        /// <param name="T">Table to get record from</param>
+        /// <returns>An IEnumerable of values from the table</returns>
         public IEnumerable<object> GetSingleRandomRecordFrom(Table T)
         {
             Random rand = new Random();
@@ -114,5 +145,6 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
             }
             return values;
         }
+        #endregion
     }
 }
