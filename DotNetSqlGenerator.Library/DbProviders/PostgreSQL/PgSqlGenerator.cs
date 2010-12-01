@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using Npgsql;
 using DotNetSqlGenerator.Library.Interfaces;
-using System.Data;
-using NpgsqlTypes;
 using DotNetSqlGenerator.Library.Objects;
-using DotNetSqlGenerator.Library.DbProviders.PostgreSQL;
-using DotNetSqlGenerator.Library.Objects;
-using System.Timers;
-using DotNetSqlGenerator.Library;
+using Npgsql;
 
 namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
 {
+    /// <summary>
+    /// Specialized SqlGenerator for pgsql
+    /// </summary>
     public class PgSqlGenerator : SqlGenerator, IGenerator
     {
         #region Properties_Initializers
@@ -87,7 +84,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         }
 
         #endregion General_Methods
-        
+
         #region Execution
 
         /// <summary>
@@ -97,9 +94,13 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         /// <returns>QueryInformation object holding the information on the query</returns>
         public QueryInformation ExecuteInsert(Table T)
         {
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Insert);
             info.Query = GenerateSql.Insert.For(T);
             info.Affected = RunNonQuery(info.Query);
+            timer.Stop();
+            info.Time = timer.ElapsedMilliseconds;
             return info;
         }
 
@@ -111,9 +112,13 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         /// <returns>QueryInformation object holding the information on the query</returns>
         public QueryInformation ExecuteBulkInsert(Table T, int howMany)
         {
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Insert);
             info.Query = GenerateSql.Insert.BulkFor(T, howMany);
             info.Affected = RunNonQuery(info.Query);
+            timer.Stop();
+            info.Time = timer.ElapsedMilliseconds;
             return info;
         }
 
@@ -124,9 +129,13 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         /// <returns>QueryInformation object holding the information on the query</returns>
         public QueryInformation ExecuteDelete(Table T)
         {
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Delete);
             info.Query = GenerateSql.Delete.For(T, this);
             info.Affected = RunNonQuery(info.Query);
+            timer.Stop();
+            info.Time = timer.ElapsedMilliseconds;
             return info;
         }
 
@@ -137,9 +146,13 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         /// <returns>QueryInformation object holding the information on the query</returns>
         public QueryInformation ExecuteUpdate(Table T)
         {
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Update);
             info.Query = GenerateSql.Update.For(T, this);
             info.Affected = RunNonQuery(info.Query);
+            timer.Stop();
+            info.Time = timer.ElapsedMilliseconds;
             return info;
         }
 
@@ -152,9 +165,13 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         /// <returns>QueryInformation object holding the information on the query</returns>
         public QueryInformation ExecuteSelect(Table T, int columnsToReturn = -1, int columnsToSearch = -1)
         {
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Select);
             info.Query = GenerateSql.Select.For(T, this, columnsToReturn, columnsToSearch);
             info.Reader = RunReader(info.Query);
+            timer.Stop();
+            info.Time = timer.ElapsedMilliseconds;
             return info;
         }
 
@@ -176,8 +193,8 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
             //Connection.Open();
             //NpgsqlDataReader reader = new NpgsqlCommand(query, Connection).ExecuteReader();
             //Connection.Close();
-           
- 
+
+
             while (reader.HasRows && reader.VisibleFieldCount > 0 && reader.Read())
             {
                 try { tableNames.Add(reader[0].ToString()); }
@@ -216,7 +233,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
             for (int i = 0; i < T.Columns.Count(); i++)
             {
                 try { values.Add(reader[i]); }
-                catch (Exception ex) { throw new Exception("NpgSql error while reading in single record: GetSingleRandomRecordFrom()", new Exception(ex.Message));  }
+                catch (Exception ex) { throw new Exception("NpgSql error while reading in single record: GetSingleRandomRecordFrom()", new Exception(ex.Message)); }
             }
             return values;
         }

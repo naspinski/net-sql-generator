@@ -16,6 +16,7 @@ namespace DotNetSqlGenerator.Library.Objects
         public object Scalar { get; set; }
         public IDataReader Reader { get; set; }
         public DotNetSqlGenerator.Library.SqlGenerator.SqlStatementType StatementType { get; private set; }
+        public long Time { get; set; }
 
         public QueryInformation(DotNetSqlGenerator.Library.SqlGenerator.SqlStatementType statementType)
         {
