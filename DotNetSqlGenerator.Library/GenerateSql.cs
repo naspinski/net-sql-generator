@@ -13,7 +13,16 @@ namespace DotNetPostgresSqlGenerator.Library
 
         public static class Delete
         {
-
+            public static string For(Table T, PgSqlGenerator pg)
+            {
+                IEnumerable<object> singleRandomRecord = pg.GetSingleRandomRecordFrom(T);
+                StringBuilder sql = new StringBuilder();
+                Random rand = new Random();
+                int r = rand.Next(0, T.MaxColumnIndex);
+                Column c = T.Columns.Skip(r).First();
+                sql.Append("DELETE FROM " + T.Name + " WHERE " + c.Name + " = " + Quote(singleRandomRecord.Skip(r).First().ToString(), c) + ";");
+                return sql.ToString();
+            }
         }
 
         public static class Update
@@ -23,8 +32,9 @@ namespace DotNetPostgresSqlGenerator.Library
 
         public static class Select
         {
-            public static string For(Table T, IEnumerable<object> singleRandomRecord, int numberOfColumnsToReturn = -1, int numberOfColumnsToSearch = -1)
+            public static string For(Table T, PgSqlGenerator pg, int numberOfColumnsToReturn = -1, int numberOfColumnsToSearch = -1)
             {
+                IEnumerable<object> singleRandomRecord = pg.GetSingleRandomRecordFrom(T);
                 int WHERE_LIMITER = 4;
                 StringBuilder sql = new StringBuilder(), select = new StringBuilder(), where = new StringBuilder();
                 Random rand = new Random();
@@ -36,17 +46,20 @@ namespace DotNetPostgresSqlGenerator.Library
                 if (numberOfColumnsToSearch > T.Columns.Count()) numberOfColumnsToSearch = T.Columns.Count();
 
                 List<int> used = new List<int>();
-                string comma, quote, and;
+                string comma, and;
 
                 if (numberOfColumnsToReturn < 0 || numberOfColumnsToReturn >= T.Columns.Count()) select.Append("*");
                 else // Select random attributes
                 {
                     while (used.Count < numberOfColumnsToReturn)
                     {
-                        r = rand.Next(0, T.Columns.Count());
+                        r = rand.Next(0, T.MaxColumnIndex);
                         comma = (used.Count < numberOfColumnsToReturn - 1) ? ", " : string.Empty;
-                        if (!used.Contains(r)) select.Append(T.Columns.Skip(r).First().Name + comma);
-                        used.Add(r);
+                        if (!used.Contains(r))
+                        {
+                            select.Append(T.Columns.Skip(r).First().Name + comma);
+                            used.Add(r);
+                        }
                     }
                 }
 
@@ -54,13 +67,12 @@ namespace DotNetPostgresSqlGenerator.Library
                 used = new List<int>();
                 while (used.Count < numberOfColumnsToSearch)
                 {
-                    r = rand.Next(0, T.Columns.Count());
+                    r = rand.Next(0, T.MaxColumnIndex);
                     and = (used.Count < numberOfColumnsToSearch - 1) ? " AND " : string.Empty;
                     if (!used.Contains(r))
                     {
                         Column c = T.Columns.Skip(r).First();
-                        quote = UnQuotedTypes.Contains(c.DotNetType) ? string.Empty : "'";
-                        where.Append(c.Name + " = " + quote + singleRandomRecord.Skip(r).First().ToString() + quote + and);
+                        where.Append(c.Name + " = " + Quote(singleRandomRecord.Skip(r).First().ToString(), c) + and);
                         used.Add(r);
                     }
                 }
@@ -71,6 +83,12 @@ namespace DotNetPostgresSqlGenerator.Library
                 sql.Append("SELECT " + sel + " FROM " + T.Name + " WHERE " + where.ToString() + ";");
                 return sql.ToString();
             }
+        }
+
+        public static string Quote(string s, Column c)
+        {
+            if (UnQuotedTypes.Contains(c.DotNetType)) return s;
+            return "'" + s + "'";
         }
 
         public static class Insert
@@ -84,17 +102,19 @@ namespace DotNetPostgresSqlGenerator.Library
             public static string For(Table T)
             {
                 StringBuilder sql = new StringBuilder("INSERT INTO " + T.Name + " (");
-                StringBuilder fields = new StringBuilder();
-                StringBuilder values = new StringBuilder();
-                string comma;
-                for(int i=0;i<T.Columns.Count();i++)
-                {
-                    comma = (i < T.Columns.Count() - 1) ? ", " : string.Empty;
-                    Column c = T.Columns.Skip(i).First();
-                    fields.Append(c.Name+comma);
-                    values.Append(GenerateValues.ForColumn(c) + comma);
-                }
-                sql.Append(fields.ToString() + ") VALUES (" + values.ToString() + ");");
+                //StringBuilder fields = new StringBuilder();
+                //StringBuilder values = new StringBuilder();
+                //string comma;
+                //for(int i=0;i<T.Columns.Count();i++)
+                //{
+                //    comma = (i < T.Columns.Count() - 1) ? ", " : string.Empty;
+                //    Column c = T.Columns.Skip(i).First();
+                //    fields.Append(c.Name+comma);
+                //    values.Append(GenerateValues.ForColumn(c) + comma);
+                //}
+                string[] insertSet = CreateInsertSetFor(T);
+                //sql.Append(fields.ToString() + ") VALUES (" + values.ToString() + ");");
+                sql.Append(insertSet[0] + ") VALUES (" + insertSet[1] + ");");
                 return sql.ToString();
             }
 
@@ -111,6 +131,28 @@ namespace DotNetPostgresSqlGenerator.Library
                 List<string> queries = new List<string>();
                 for (int i = 0; i < howMany; i++) queries.Add(GenerateSql.Insert.For(T));
                 return queries;
+            }
+
+            public static string BulkFor(Table T, int howMany)
+            {
+                if (howMany < 1) throw new Exception("howMany in GenerateSql.Insert.BulkFor cannot be lower than 1");
+                StringBuilder sql = new StringBuilder();
+
+                return sql.ToString();
+            }
+
+            private static string[] CreateInsertSetFor(Table T)
+            {
+                StringBuilder fields = new StringBuilder(), values = new StringBuilder();
+                string comma;
+                for (int i = 0; i < T.Columns.Count(); i++)
+                {
+                    comma = (i < T.Columns.Count() - 1) ? ", " : string.Empty;
+                    Column c = T.Columns.Skip(i).First();
+                    fields.Append(c.Name + comma);
+                    values.Append(GenerateValues.ForColumn(c) + comma);
+                }
+                return new string[] { fields.ToString(), values.ToString() };
             }
         }
     }

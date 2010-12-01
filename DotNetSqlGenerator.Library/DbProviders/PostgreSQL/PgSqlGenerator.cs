@@ -33,7 +33,6 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         private void Initialize()
         {
             DatabaseProvider = DbProvider.PostgreSQL;
-            Connection = new Npgsql.NpgsqlConnection(ConnectionString);
             TableNames = GetTableNames();
         }
 
@@ -53,41 +52,38 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
 
         public int RunNonQuery(string query)
         {
+            Connection = new Npgsql.NpgsqlConnection(ConnectionString);
             return RunNonQuery(CreateCommand(query), Connection);
         }
 
-        public IDataReader RunReader(string query)
+        public NpgsqlDataReader RunReader(string query)
         {
-            return RunReader(CreateCommand(query), Connection);
+            Connection = new Npgsql.NpgsqlConnection(ConnectionString);
+            return (NpgsqlDataReader)RunReader(CreateCommand(query), Connection);
         }
 
         public object RunScalar(string query)
         {
+            Connection = new Npgsql.NpgsqlConnection(ConnectionString);
             return RunScalar(CreateCommand(query), Connection);
         }
 
         #endregion General_Methods
-
-        public IEnumerable<PgColumn> GetColumns(string tablename)
-        {
-            List<PgColumn> columns = new List<PgColumn>();
-            string query = "SELECT a.attname as \"Column\", pg_catalog.format_type(a.atttypid, a.atttypmod) as \"Datatype\", a.attnotnull as \"NotNull\" " +
-                            "FROM pg_catalog.pg_attribute a " +
-                            "WHERE a.attnum > 0 AND NOT a.attisdropped AND a.attrelid = (" +
-                                "SELECT c.oid FROM pg_catalog.pg_class c " +
-                                    "LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace " +
-                                "WHERE c.relname ~ '^(" + tablename.ToLower() + ")$' AND pg_catalog.pg_table_is_visible(c.oid));";
-            IDataReader reader = RunReader(CreateCommand(query), Connection);
-            while (reader.Read()) columns.Add(new PgColumn(reader));
-            return columns;
-        }
-
+        
         private IEnumerable<string> GetTableNames()
         {
             List<string> tableNames = new List<string>();
             string query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public';";
-            IDataReader reader = RunReader(query);
-            while (reader.Read())
+
+
+            NpgsqlDataReader reader = RunReader(query);
+            //Connection = new NpgsqlConnection(ConnectionString);
+            //Connection.Open();
+            //NpgsqlDataReader reader = new NpgsqlCommand(query, Connection).ExecuteReader();
+            //Connection.Close();
+           
+ 
+            while (reader.HasRows && reader.VisibleFieldCount > 0 && reader.Read())
             {
                 try { tableNames.Add(reader[0].ToString()); }
                 catch (Exception ex) { throw new Exception("Nopgsql Error getting table names", new Exception(ex.Message)); }

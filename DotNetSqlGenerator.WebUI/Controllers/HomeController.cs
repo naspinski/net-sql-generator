@@ -19,9 +19,13 @@ namespace DotNetSqlGenerator.WebUI.Controllers
             try
             {
                 var people = pg.GetTable("people");
-                //string query = GenerateSql.Insert.For(people);
-                string query = GenerateSql.Select.For(people, pg.GetSingleRandomRecordFrom(people), 2, 3);
-                ViewData["query"] = query;
+                ////string query = GenerateSql.Insert.For(people);
+                string query = GenerateSql.Select.For(people, pg, 2);
+                ViewData["query"] = "select statement: " + query + "<br /><br />";
+
+                ViewData["query"] += "delete statement: " + GenerateSql.Delete.For(people, pg) + "<br /><br />";
+
+                ViewData["query"] += "insert statement: " + GenerateSql.Insert.For(people) + "<br /><br />";
 
                 //pg.RunNonQuery("DELETE FROM people WHERE id <> 11;");
                 //int inserted = pg.RunNonQuery(query);
@@ -29,14 +33,14 @@ namespace DotNetSqlGenerator.WebUI.Controllers
                 //ViewData["output"] = inserted.ToString();
 
                 string show = "";
-                var reader = pg.RunReader("SELECT * FROM people");
+                //var reader = pg.RunReader("SELECT * FROM people");
                 //while (reader.Read())
                 //    show += reader["id"] + " | " + reader["name"] + "<br />";
 
                 show += "<h2>single random record</h2>";
 
-                foreach (object o in pg.GetSingleRandomRecordFrom(people))
-                    show += o.ToString() + "<br />";
+                //foreach (object o in pg.GetSingleRandomRecordFrom(people))
+                //    show += o.ToString() + "<br />";
 
                 ViewData["table"] = show;
             }
