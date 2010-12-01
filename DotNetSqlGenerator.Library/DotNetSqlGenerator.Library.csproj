@@ -8,7 +8,7 @@
     <ProjectGuid>{EC67172F-6A47-4567-B853-25DB73A71909}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DotNetPostgresSqlGenerator.Library</RootNamespace>
+    <RootNamespace>DotNetSqlGenerator.Library</RootNamespace>
     <AssemblyName>DotNetPostgresSqlGenerator.Library</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -47,6 +47,7 @@
     <Compile Include="GenerateSql.cs" />
     <Compile Include="Interfaces\IGenerator.cs" />
     <Compile Include="Objects\Column.cs" />
+    <Compile Include="Objects\QueryInformation.cs" />
     <Compile Include="Objects\Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlGenerator.cs" />

@@ -13,6 +13,7 @@ namespace DotNetSqlGenerator.Library
     public class SqlGenerator
     {
         public enum DbProvider {PostgreSQL}; //add more as they are added
+        public enum SqlStatementType { Insert, Delete, Update, Select };
 
         #region Properties_Initializers
 

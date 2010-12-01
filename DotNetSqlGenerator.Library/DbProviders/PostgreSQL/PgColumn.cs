@@ -7,7 +7,7 @@ using NpgsqlTypes;
 using DotNetSqlGenerator.Library.DbProviders.PostgreSQL;
 using System.Data;
 
-namespace DotNetPostgresSqlGenerator.Library.DbProviders.PostgreSQL
+namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
 {
     /// <summary>
     /// Additional information needed for PostgreSQL columns

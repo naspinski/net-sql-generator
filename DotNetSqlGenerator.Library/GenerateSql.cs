@@ -5,7 +5,7 @@ using System.Text;
 using DotNetSqlGenerator.Library.Objects;
 using DotNetSqlGenerator.Library.DbProviders.PostgreSQL;
 
-namespace DotNetPostgresSqlGenerator.Library
+namespace DotNetSqlGenerator.Library
 {
     /// <summary>
     /// Generates generic T-SQL statements for all T-SQL compliant DBMSs

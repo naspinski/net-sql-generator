@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DotNetSqlGenerator.Library.DbProviders.PostgreSQL;
-using DotNetPostgresSqlGenerator.Library.DbProviders.PostgreSQL;
+using DotNetSqlGenerator.Library.DbProviders.PostgreSQL;
 using Npgsql;
 
 namespace DotNetSqlGenerator.Library.Objects

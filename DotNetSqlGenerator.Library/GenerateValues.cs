@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using DotNetSqlGenerator.Library.Objects;
 
-namespace DotNetPostgresSqlGenerator.Library
+namespace DotNetSqlGenerator.Library
 {
     /// <summary>
     /// Generates random values for use in the queries
