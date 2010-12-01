@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DotNetSqlGenerator.Library.Objects;
 using DotNetSqlGenerator.Library.DbProviders.PostgreSQL;
+using DotNetSqlGenerator.Library.Objects;
 
 namespace DotNetSqlGenerator.Library
 {

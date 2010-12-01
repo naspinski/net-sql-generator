@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data;
 using DotNetSqlGenerator.Library.Objects;
 using NpgsqlTypes;
-using DotNetSqlGenerator.Library.DbProviders.PostgreSQL;
-using System.Data;
 
 namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
 {

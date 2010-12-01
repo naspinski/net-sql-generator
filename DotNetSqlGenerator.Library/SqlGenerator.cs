@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
-using DotNetSqlGenerator.Library.Interfaces;
+﻿using System.Data;
 
 namespace DotNetSqlGenerator.Library
 {

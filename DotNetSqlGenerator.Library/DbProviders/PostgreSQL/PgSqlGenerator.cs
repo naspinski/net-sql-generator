@@ -16,7 +16,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         #region Properties_Initializers
         public IEnumerable<string> TableNames { get; private set; }
 
-        protected NpgsqlConnection Connection;
+        new protected NpgsqlConnection Connection;
 
         public PgSqlGenerator(string server, int port, string user, string password, string database, string options = "")
         {
@@ -39,11 +39,6 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         private NpgsqlCommand CreateCommand(string query)
         {
             return new NpgsqlCommand(query, Connection);
-        }
-
-        public void Dispose()
-        {
-            Connection.Dispose();
         }
 
         #endregion Properties_Initializers
