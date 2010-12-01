@@ -9,6 +9,9 @@ using System.Data;
 
 namespace DotNetPostgresSqlGenerator.Library.DbProviders.PostgreSQL
 {
+    /// <summary>
+    /// Additional information needed for PostgreSQL columns
+    /// </summary>
     public class PgColumn : Column
     {
         public NpgsqlDbType PgType { get; private set; }
