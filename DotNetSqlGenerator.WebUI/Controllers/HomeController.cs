@@ -27,22 +27,26 @@ namespace DotNetSqlGenerator.WebUI.Controllers
 
                 ViewData["query"] += "insert statement: " + GenerateSql.Insert.For(people) + "<br /><br />";
 
+                ViewData["query"] += "insert bulk statement: " + GenerateSql.Insert.BulkFor(people, 3) + "<br /><br />";
+
+                ViewData["query"] += "update statement: " + GenerateSql.Update.For(people, pg) + "<br /><br />";
+
                 //pg.RunNonQuery("DELETE FROM people WHERE id <> 11;");
                 //int inserted = pg.RunNonQuery(query);
 
                 //ViewData["output"] = inserted.ToString();
 
-                string show = "";
+                //string show = "";
                 //var reader = pg.RunReader("SELECT * FROM people");
                 //while (reader.Read())
                 //    show += reader["id"] + " | " + reader["name"] + "<br />";
 
-                show += "<h2>single random record</h2>";
+                //show += "<h2>single random record</h2>";
 
                 //foreach (object o in pg.GetSingleRandomRecordFrom(people))
                 //    show += o.ToString() + "<br />";
 
-                ViewData["table"] = show;
+                //ViewData["table"] = show;
             }
             finally { pg.Dispose(); }
 

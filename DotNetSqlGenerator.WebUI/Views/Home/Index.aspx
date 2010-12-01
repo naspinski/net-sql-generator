@@ -6,9 +6,6 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <h2><%= ViewData["query"] %></h2>
-    <h3>affected rows: <%= ViewData["output"] %></h3>
-    <h4>resulting table:</h4>
-    <%= ViewData["table"] %>
     
 
 

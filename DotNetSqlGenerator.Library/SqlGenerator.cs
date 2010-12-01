@@ -85,5 +85,6 @@ namespace DotNetSqlGenerator.Library
         }
 
         #endregion General_Methods
+
     }
 }
