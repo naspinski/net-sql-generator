@@ -1,0 +1,10 @@
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\bin\Debug\DotNotPostgreSqlGenerator.Tests.dll
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\bin\Debug\DotNotPostgreSqlGenerator.Tests.pdb
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\bin\Debug\DotNetPostgresSqlGenerator.Library.dll
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\bin\Debug\nunit.framework.dll
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\bin\Debug\Npgsql.dll
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\bin\Debug\DotNetPostgresSqlGenerator.Library.pdb
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\obj\Debug\DotNotPostgreSqlGenerator.Tests.dll
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\obj\Debug\DotNotPostgreSqlGenerator.Tests.pdb
+C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotPostgreSqlGenerator.Tests\bin\Debug\Mono.Security.dll

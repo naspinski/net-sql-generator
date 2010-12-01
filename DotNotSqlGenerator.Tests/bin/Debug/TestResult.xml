@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotSqlGenerator\DotNotSqlGenerator.Tests\bin\Debug\DotNotPostgreSqlGenerator.Tests.dll" total="3" errors="2" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2010-11-30" time="19:56:32">
+  <environment nunit-version="2.5.8.10295" clr-version="2.0.50727.4952" os-version="Microsoft Windows NT 6.1.7600.0" platform="Win32NT" cwd="C:\Program Files (x86)\NUnit 2.5.8\bin\net-2.0" machine-name="NASPINSKI-PC" user="naspinski" user-domain="naspinski-PC" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="Assembly" name="C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotSqlGenerator\DotNotSqlGenerator.Tests\bin\Debug\DotNotPostgreSqlGenerator.Tests.dll" executed="True" result="Failure" success="False" time="5.224" asserts="0">
+    <results>
+      <test-suite type="Namespace" name="DotNotPostgreSqlGenerator" executed="True" result="Failure" success="False" time="5.191" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="Tests" executed="True" result="Failure" success="False" time="5.183" asserts="0">
+            <results>
+              <test-suite type="TestFixture" name="BasicTests" executed="True" result="Failure" success="False" time="5.178" asserts="0">
+                <results>
+                  <test-case name="DotNotPostgreSqlGenerator.Tests.BasicTests.AddAndDeleteRow" executed="True" result="Success" success="True" time="4.054" asserts="1" />
+                  <test-case name="DotNotPostgreSqlGenerator.Tests.BasicTests.GetColumns" executed="True" result="Error" success="False" time="0.477" asserts="1">
+                    <failure>
+                      <message><![CDATA[System.InvalidOperationException : Invalid attempt to read when no data is present.]]></message>
+                      <stack-trace><![CDATA[at Npgsql.ForwardsOnlyDataReader.CheckHaveRow()
+at Npgsql.ForwardsOnlyDataReader.GetProviderSpecificValue(Int32 ordinal)
+at Npgsql.ForwardsOnlyDataReader.GetValue(Int32 Index)
+at DotNotPostgreSqlGenerator.Tests.BasicTests.GetColumns() in C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotSqlGenerator.Tests\BasicTests.cs:line 52
+]]></stack-trace>
+                    </failure>
+                  </test-case>
+                  <test-case name="DotNotPostgreSqlGenerator.Tests.BasicTests.GetTables" executed="True" result="Error" success="False" time="0.356" asserts="0">
+                    <failure>
+                      <message><![CDATA[System.InvalidOperationException : Invalid attempt to read when no data is present.]]></message>
+                      <stack-trace><![CDATA[at Npgsql.ForwardsOnlyDataReader.CheckHaveRow()
+at Npgsql.ForwardsOnlyDataReader.GetProviderSpecificValue(Int32 ordinal)
+at Npgsql.ForwardsOnlyDataReader.GetValue(Int32 Index)
+at DotNetSqlGenerator.Library.DbProviders.PostgreSQL.PgSqlGenerator.TableNames() in C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNetSqlGenerator.Library\DbProviders\PostgreSQL\PgSqlGenerator.cs:line 84
+at DotNotPostgreSqlGenerator.Tests.BasicTests.GetTables() in C:\Users\naspinski\Documents\School\CIS6930 Databases\Project 4\DotNotPostgreSqlGenerator\DotNotSqlGenerator.Tests\BasicTests.cs:line 27
+]]></stack-trace>
+                    </failure>
+                  </test-case>
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>
