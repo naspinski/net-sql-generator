@@ -37,7 +37,8 @@ namespace DotNetSqlGenerator.Library
             Random rand = new Random();
             int r = rand.Next(0, T.MaxColumnIndex);
             Column c = T.Columns.Skip(r).First();
-            sql.Append("DELETE FROM " + T.Name + " WHERE " + c.Name + " = " + Quote(singleRandomRecord.Skip(r).First().ToString(), c) + ";");
+            string val = Quote(singleRandomRecord.Skip(r).First().ToString(), c);
+            sql.Append("DELETE FROM " + T.Name + " WHERE " + c.Name + NullTest(val) + ";");
             return sql.ToString();
         }
                 
@@ -63,7 +64,8 @@ namespace DotNetSqlGenerator.Library
             }
 
             c = T.Columns.Skip(whereColumn).First();
-            sql.Append(" WHERE " + c.Name + " = " + GenerateValue.ForColumn(c) + ";");
+            string val = Quote(singleRandomRecord.Skip(whereColumn).First().ToString(), c);
+            sql.Append(" WHERE " + c.Name + NullTest(val) + ";");
 
             return sql.ToString();
         }
@@ -79,13 +81,13 @@ namespace DotNetSqlGenerator.Library
         public string Select(Table T, PgSqlGenerator pg, int numberOfColumnsToReturn = -1, int numberOfColumnsToSearch = -1)
         {
             IEnumerable<object> singleRandomRecord = pg.GetSingleRandomRecordFrom(T);
-            int WHERE_LIMITER = 4;
+            int WHERE_LIMITER = 4, r;
+            string val;
+            Column c;
             StringBuilder sql = new StringBuilder(), select = new StringBuilder(), where = new StringBuilder();
-            Random rand = new Random();
-            int r;
 
             while (numberOfColumnsToReturn < WHERE_LIMITER) WHERE_LIMITER--;
-            if (numberOfColumnsToSearch < 1) numberOfColumnsToSearch = rand.Next(WHERE_LIMITER, numberOfColumnsToReturn) / WHERE_LIMITER; //search at most 1/WHERE_LIMITER of attributes
+            if (numberOfColumnsToSearch < 1) numberOfColumnsToSearch = Rand.Next(WHERE_LIMITER, numberOfColumnsToReturn) / WHERE_LIMITER; //search at most 1/WHERE_LIMITER of attributes
             if (numberOfColumnsToSearch < 1) numberOfColumnsToSearch = 1;
             if (numberOfColumnsToSearch > T.Columns.Count()) numberOfColumnsToSearch = T.Columns.Count();
 
@@ -97,7 +99,7 @@ namespace DotNetSqlGenerator.Library
             {
                 while (used.Count < numberOfColumnsToReturn)
                 {
-                    r = rand.Next(0, T.MaxColumnIndex);
+                    r = Rand.Next(0, T.MaxColumnIndex);
                     comma = (used.Count < numberOfColumnsToReturn - 1) ? ", " : string.Empty;
                     if (!used.Contains(r))
                     {
@@ -111,12 +113,13 @@ namespace DotNetSqlGenerator.Library
             used = new List<int>();
             while (used.Count < numberOfColumnsToSearch)
             {
-                r = rand.Next(0, T.MaxColumnIndex);
+                r = Rand.Next(0, T.MaxColumnIndex);
                 and = (used.Count < numberOfColumnsToSearch - 1) ? " AND " : string.Empty;
                 if (!used.Contains(r))
                 {
-                    Column c = T.Columns.Skip(r).First();
-                    where.Append(c.Name + " = " + Quote(singleRandomRecord.Skip(r).First().ToString(), c) + and);
+                    c = T.Columns.Skip(r).First();
+                    val = Quote(singleRandomRecord.Skip(r).First().ToString(), c);
+                    where.Append(c.Name + NullTest(val) + and);
                     used.Add(r);
                 }
             }
@@ -204,10 +207,21 @@ namespace DotNetSqlGenerator.Library
         /// <returns>quotes string if necessary, s if not</returns>
         public string Quote(string s, Column c)
         {
+
             int test;
-            if (int.TryParse(s, out test)) return s; //isnumeric
-            if (UnQuotedTypes.Contains(c.DotNetType)) return s;
+            if (int.TryParse(s, out test) || UnQuotedTypes.Contains(c.DotNetType)) 
+                return s.Length < 1 ? "NULL" : s;
+            if (s.Length < 1) return "NULL";
             return "'" + s + "'";
+        }
+
+        public string NullTest(string val)
+        {
+            string results = (val.Equals("NULL") ? " IS " : " = ") + val;
+            // hack to get around the problems I had with the o & 1 turning into True/False somewhere
+            if(val.Equals(bool.FalseString)) results = " = '0'";
+            else if (val.Equals(bool.TrueString)) results = " = '1'";
+            return results;
         }
 
         #endregion
