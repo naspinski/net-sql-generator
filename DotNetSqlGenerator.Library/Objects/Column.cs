@@ -33,7 +33,7 @@ namespace DotNetSqlGenerator.Library.Objects
                 Limit = Convert.ToInt32(lim);
             }
 
-            switch(dt)
+            switch(dt.ToLower())
             {
                 case "integer": SqlType = SqlDbType.Int; DotNetType = typeof(Int32); break;
                 case "character varying": SqlType = SqlDbType.VarChar; DotNetType = typeof(String); break;
@@ -43,6 +43,17 @@ namespace DotNetSqlGenerator.Library.Objects
                 case "numeric": SqlType = SqlDbType.Decimal; DotNetType = typeof(Decimal); break;
                 case "real": SqlType = SqlDbType.Real; DotNetType = typeof(Single); break;
                 case "double precision": SqlType = SqlDbType.Float; DotNetType = typeof(Double); break;
+                case "money": SqlType = SqlDbType.Money; DotNetType = typeof(Decimal); break;
+                case "char": case "character": SqlType = SqlDbType.Char; DotNetType = typeof(String); break;
+                case "text": case "ntext": SqlType = SqlDbType.Text; DotNetType = typeof(String); break;
+                case "bytea": SqlType = SqlDbType.Binary; DotNetType = typeof(Byte[]); break;
+                case "interval": SqlType = SqlDbType.Time; DotNetType = typeof(TimeSpan); break;
+                case "time":
+                case "time without time zone":
+                case "time with time zone":
+                case "timestamp without time zone": 
+                case "timestamp with time zone":
+                case "timestamp": SqlType = SqlDbType.Timestamp; DotNetType = typeof(DateTime); break;
                 default: throw new Exception(dt + " not yet implemented");
             }
         }

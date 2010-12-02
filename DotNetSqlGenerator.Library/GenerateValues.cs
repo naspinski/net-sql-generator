@@ -37,9 +37,13 @@ namespace DotNetSqlGenerator.Library
         public static int Integer(int max = Int16.MaxValue)
         {
             max = max > Int16.MaxValue ? Int16.MaxValue : max;
-            Random rand = new Random();
-            rand.Next();
-            return rand.Next(-max, max);
+            return new Random().Next(-max, max);
+        }
+
+        public static string Bytes()
+        {
+            int decNum = new Random().Next(0, 20);
+            return Quote(Convert.ToString(decNum, 2));
         }
 
         /// <summary>
@@ -49,9 +53,15 @@ namespace DotNetSqlGenerator.Library
         public static DateTime Date()
         {
             DateTime start = new DateTime(1995, 1, 1);
-            Random rand = new Random();
             int range = ((TimeSpan)(DateTime.Today - start)).Days;
-            return start.AddDays(rand.Next(range));
+            Random rand = new Random();
+            start.AddDays(rand.Next(range));
+            return start.AddSeconds(rand.Next(86400));
+        }
+
+        public static string Time()
+        {
+            return Quote(Date().TimeOfDay.ToString());
         }
 
         /// <summary>
@@ -63,9 +73,12 @@ namespace DotNetSqlGenerator.Library
         {
             // switch statement won't work here
             if (c.DotNetType == typeof(String)) return GenerateValues.Quote(GenerateValues.String((c.Limit > -1 ? c.Limit : 255)));
-            else if (c.DotNetType == typeof(Int32) || c.DotNetType == typeof(Int16) || c.DotNetType == typeof(Int64) || c.DotNetType == typeof(Double) || c.DotNetType == typeof(Single) || c.DotNetType == typeof(Decimal)) 
+            else if (c.DotNetType == typeof(Int32) || c.DotNetType == typeof(Int16) || c.DotNetType == typeof(Int64) ||
+                c.DotNetType == typeof(Double) || c.DotNetType == typeof(Single) || c.DotNetType == typeof(Decimal))
                 return GenerateValues.Integer().ToString();
-            else if (c.DotNetType == typeof(DateTime)) return GenerateValues.Quote(GenerateValues.Date().ToString()) ;
+            else if (c.DotNetType == typeof(DateTime)) return GenerateValues.Quote(GenerateValues.Date().ToString());
+            else if (c.DotNetType == typeof(Byte[])) return GenerateValues.Bytes();
+            else if (c.DotNetType == typeof(TimeSpan)) return GenerateValues.Time();
             else throw new Exception("problem making value for column: " + c.Name + " type: " + c.SqlType.ToString());
         }
 

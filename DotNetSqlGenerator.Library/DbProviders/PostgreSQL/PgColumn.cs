@@ -17,6 +17,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         {
             if (!reader[2].ToString().Trim().Equals("t")) NotNull = false;
 
+            // this isn't used yet, but might be useful for someone else?
             switch(this.SqlType)
             {
                 case SqlDbType.Int: PgType = NpgsqlDbType.Integer; break;
@@ -27,7 +28,13 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
                 case SqlDbType.Decimal: PgType = NpgsqlDbType.Numeric; break;
                 case SqlDbType.Real: PgType = NpgsqlDbType.Real; break;
                 case SqlDbType.Float: PgType = NpgsqlDbType.Double; break;
-                default: throw new Exception("error with SQL > PgSQL data type conversion");
+                case SqlDbType.Money: PgType = NpgsqlDbType.Money; break;
+                case SqlDbType.Char: PgType = NpgsqlDbType.Char; break;
+                case SqlDbType.Text: PgType = NpgsqlDbType.Text; break;
+                case SqlDbType.Binary: PgType = NpgsqlDbType.Bytea; break;
+                case SqlDbType.Time: PgType = NpgsqlDbType.Time; break;
+                case SqlDbType.Timestamp: PgType = NpgsqlDbType.Timestamp; break;
+                default: throw new Exception("error with SQL > PgSQL data type conversion: " + this.SqlType.ToString());
             }
         }
     }
