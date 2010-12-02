@@ -12,7 +12,7 @@ namespace DotNetSqlGenerator.Library
         #region Randoms
 
         /// <summary>
-        /// generates a random string within given bounds (uses Int16 for all integers)
+        /// generates a random string within given bounds
         /// </summary>
         /// <param name="limit">max length of string, default is 255</param>
         /// <returns>random string</returns>
@@ -30,7 +30,7 @@ namespace DotNetSqlGenerator.Library
         }
 
         /// <summary>
-        /// generates a random integer within bounds
+        /// generates a random integer within bounds (uses Int16 to be sure it will fit in any int type)
         /// </summary>
         /// <param name="max">maximum value, this is both upper and lower bounds</param>
         /// <returns>random integer</returns>
@@ -40,10 +40,14 @@ namespace DotNetSqlGenerator.Library
             return new Random().Next(-max, max);
         }
 
-        public static string Bytes()
-        {
-            int decNum = new Random().Next(0, 20);
-            return Quote(Convert.ToString(decNum, 2));
+        /// <summary>
+        /// gets a string represntation of a binary number
+        /// </summary>
+        /// <returns>binary in string form</returns>
+        public static string Binary(int length = 8)
+        {            
+            int decNum = new Random().Next(1000, int.MaxValue);
+            return Convert.ToString(decNum, 2).Substring(0, length);
         }
 
         /// <summary>
@@ -90,7 +94,7 @@ namespace DotNetSqlGenerator.Library
                 c.DotNetType == typeof(Double) || c.DotNetType == typeof(Single) || c.DotNetType == typeof(Decimal))
                 return GenerateValues.Integer().ToString();
             else if (c.DotNetType == typeof(DateTime)) return GenerateValues.Quote(GenerateValues.Date().ToString());
-            else if (c.DotNetType == typeof(Byte[])) return GenerateValues.Bytes();
+            else if (c.DotNetType == typeof(Byte[])) return Quote(GenerateValues.Binary());
             else if (c.DotNetType == typeof(TimeSpan)) return GenerateValues.Time();
             else if (c.DotNetType == typeof(Boolean)) return Quote(GenerateValues.Bit().ToString());
             else throw new Exception("problem making value for column: " + c.Name + " type: " + c.SqlType.ToString());
