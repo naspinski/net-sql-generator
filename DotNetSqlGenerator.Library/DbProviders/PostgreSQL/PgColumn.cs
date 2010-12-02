@@ -34,6 +34,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
                 case SqlDbType.Binary: PgType = NpgsqlDbType.Bytea; break;
                 case SqlDbType.Time: PgType = NpgsqlDbType.Time; break;
                 case SqlDbType.Timestamp: PgType = NpgsqlDbType.Timestamp; break;
+                case SqlDbType.Bit: PgType = NpgsqlDbType.Bit; break;
                 default: throw new Exception("error with SQL > PgSQL data type conversion: " + this.SqlType.ToString());
             }
         }

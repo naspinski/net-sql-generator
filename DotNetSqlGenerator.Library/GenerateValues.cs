@@ -59,9 +59,22 @@ namespace DotNetSqlGenerator.Library
             return start.AddSeconds(rand.Next(86400));
         }
 
+        /// <summary>
+        /// generates a random time of day
+        /// </summary>
+        /// <returns>random time of day</returns>
         public static string Time()
         {
             return Quote(Date().TimeOfDay.ToString());
+        }
+
+        /// <summary>
+        /// generates a random bit
+        /// </summary>
+        /// <returns>1 or 0</returns>
+        public static int Bit()
+        {
+            return new Random().Next() % 2 == 0 ? 1 : 0;
         }
 
         /// <summary>
@@ -79,6 +92,7 @@ namespace DotNetSqlGenerator.Library
             else if (c.DotNetType == typeof(DateTime)) return GenerateValues.Quote(GenerateValues.Date().ToString());
             else if (c.DotNetType == typeof(Byte[])) return GenerateValues.Bytes();
             else if (c.DotNetType == typeof(TimeSpan)) return GenerateValues.Time();
+            else if (c.DotNetType == typeof(Boolean)) return Quote(GenerateValues.Bit().ToString());
             else throw new Exception("problem making value for column: " + c.Name + " type: " + c.SqlType.ToString());
         }
 

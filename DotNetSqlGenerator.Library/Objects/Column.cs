@@ -54,6 +54,9 @@ namespace DotNetSqlGenerator.Library.Objects
                 case "timestamp without time zone": 
                 case "timestamp with time zone":
                 case "timestamp": SqlType = SqlDbType.Timestamp; DotNetType = typeof(DateTime); break;
+                case "bit":
+                case "bool":
+                case "boolean": SqlType = SqlDbType.Bit; DotNetType = typeof(Boolean); break;
                 default: throw new Exception(dt + " not yet implemented");
             }
         }
