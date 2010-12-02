@@ -35,9 +35,14 @@ namespace DotNetSqlGenerator.Library.Objects
 
             switch(dt)
             {
-                case "integer": SqlType = SqlDbType.Int; DotNetType = typeof(int); break;
-                case "character varying": SqlType = SqlDbType.VarChar; DotNetType = typeof(string); break;
+                case "integer": SqlType = SqlDbType.Int; DotNetType = typeof(Int32); break;
+                case "character varying": SqlType = SqlDbType.VarChar; DotNetType = typeof(String); break;
                 case "date": SqlType = SqlDbType.Date; DotNetType = typeof(DateTime); break;
+                case "smallint": SqlType = SqlDbType.SmallInt; DotNetType = typeof(Int16); break;
+                case "bigint": SqlType = SqlDbType.BigInt; DotNetType = typeof(Int64); break;
+                case "numeric": SqlType = SqlDbType.Decimal; DotNetType = typeof(Decimal); break;
+                case "real": SqlType = SqlDbType.Real; DotNetType = typeof(Single); break;
+                case "double precision": SqlType = SqlDbType.Float; DotNetType = typeof(Double); break;
                 default: throw new Exception(dt + " not yet implemented");
             }
         }

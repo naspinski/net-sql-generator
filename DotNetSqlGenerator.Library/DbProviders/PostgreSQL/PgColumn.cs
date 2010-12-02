@@ -22,6 +22,11 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
                 case SqlDbType.Int: PgType = NpgsqlDbType.Integer; break;
                 case SqlDbType.VarChar: PgType = NpgsqlDbType.Varchar; break;
                 case SqlDbType.Date: PgType = NpgsqlDbType.Date; break;
+                case SqlDbType.SmallInt: PgType = NpgsqlDbType.Smallint; break;
+                case SqlDbType.BigInt: PgType = NpgsqlDbType.Bigint; break;
+                case SqlDbType.Decimal: PgType = NpgsqlDbType.Numeric; break;
+                case SqlDbType.Real: PgType = NpgsqlDbType.Real; break;
+                case SqlDbType.Float: PgType = NpgsqlDbType.Double; break;
                 default: throw new Exception("error with SQL > PgSQL data type conversion");
             }
         }

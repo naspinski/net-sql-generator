@@ -12,7 +12,7 @@ namespace DotNetSqlGenerator.Library
     /// </summary>
     public static class GenerateSql
     {
-        public static Type[] UnQuotedTypes = new Type[] { typeof(int), typeof(double), typeof(float), typeof(bool) };
+        public static Type[] UnQuotedTypes = new Type[] { typeof(bool) };
 
         #region Generators
 
@@ -208,6 +208,8 @@ namespace DotNetSqlGenerator.Library
         /// <returns>quotes string if necessary, s if not</returns>
         public static string Quote(string s, Column c)
         {
+            int test;
+            if (int.TryParse(s, out test)) return s; //isnumeric
             if (UnQuotedTypes.Contains(c.DotNetType)) return s;
             return "'" + s + "'";
         }

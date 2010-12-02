@@ -12,7 +12,7 @@ namespace DotNetSqlGenerator.Library
         #region Randoms
 
         /// <summary>
-        /// generates a random string within given bounds
+        /// generates a random string within given bounds (uses Int16 for all integers)
         /// </summary>
         /// <param name="limit">max length of string, default is 255</param>
         /// <returns>random string</returns>
@@ -34,9 +34,11 @@ namespace DotNetSqlGenerator.Library
         /// </summary>
         /// <param name="max">maximum value, this is both upper and lower bounds</param>
         /// <returns>random integer</returns>
-        public static int Integer(int max = int.MaxValue)
+        public static int Integer(int max = Int16.MaxValue)
         {
+            max = max > Int16.MaxValue ? Int16.MaxValue : max;
             Random rand = new Random();
+            rand.Next();
             return rand.Next(-max, max);
         }
 
@@ -60,8 +62,9 @@ namespace DotNetSqlGenerator.Library
         public static string ForColumn(Column c)
         {
             // switch statement won't work here
-            if (c.DotNetType == typeof(string)) return GenerateValues.Quote(GenerateValues.String((c.Limit > -1 ? c.Limit : 255)));
-            else if (c.DotNetType == typeof(int)) return GenerateValues.Integer().ToString();
+            if (c.DotNetType == typeof(String)) return GenerateValues.Quote(GenerateValues.String((c.Limit > -1 ? c.Limit : 255)));
+            else if (c.DotNetType == typeof(Int32) || c.DotNetType == typeof(Int16) || c.DotNetType == typeof(Int64) || c.DotNetType == typeof(Double) || c.DotNetType == typeof(Single) || c.DotNetType == typeof(Decimal)) 
+                return GenerateValues.Integer().ToString();
             else if (c.DotNetType == typeof(DateTime)) return GenerateValues.Quote(GenerateValues.Date().ToString()) ;
             else throw new Exception("problem making value for column: " + c.Name + " type: " + c.SqlType.ToString());
         }
