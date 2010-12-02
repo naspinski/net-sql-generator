@@ -92,7 +92,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
             Stopwatch timer = new Stopwatch();
             timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Insert);
-            info.Query = generateSql.Insert(T);
+            info.Query = Generate.Insert(T);
             info.Affected = RunNonQuery(info.Query);
             timer.Stop();
             info.Time = timer.ElapsedMilliseconds;
@@ -110,7 +110,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
             Stopwatch timer = new Stopwatch();
             timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Insert);
-            info.Query = generateSql.BulkInsert(T, howMany);
+            info.Query = Generate.BulkInsert(T, howMany);
             info.Affected = RunNonQuery(info.Query);
             timer.Stop();
             info.Time = timer.ElapsedMilliseconds;
@@ -127,7 +127,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
             Stopwatch timer = new Stopwatch();
             timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Delete);
-            info.Query = generateSql.Delete(T, this);
+            info.Query = Generate.Delete(T, this);
             info.Affected = RunNonQuery(info.Query);
             timer.Stop();
             info.Time = timer.ElapsedMilliseconds;
@@ -144,7 +144,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
             Stopwatch timer = new Stopwatch();
             timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Update);
-            info.Query = generateSql.Update(T, this);
+            info.Query = Generate.Update(T, this);
             info.Affected = RunNonQuery(info.Query);
             timer.Stop();
             info.Time = timer.ElapsedMilliseconds;
@@ -163,7 +163,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
             Stopwatch timer = new Stopwatch();
             timer.Start();
             QueryInformation info = new QueryInformation(SqlStatementType.Select);
-            info.Query = generateSql.Select(T, this, columnsToReturn, columnsToSearch);
+            info.Query = Generate.Select(T, this, columnsToReturn, columnsToSearch);
             info.Reader = RunReader(info.Query);
             timer.Stop();
             info.Time = timer.ElapsedMilliseconds;

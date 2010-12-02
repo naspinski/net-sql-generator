@@ -14,12 +14,12 @@ namespace DotNetSqlGenerator.Library
     {
         public Type[] UnQuotedTypes = new Type[] { typeof(bool) };
 
-        public GenerateValues generateValues;
+        public GenerateValues GenerateValue;
         public Random Rand;
         public GenerateSql()
         {
             Rand = new Random();
-            generateValues = new GenerateValues(Rand);
+            GenerateValue = new GenerateValues(Rand);
         }
 
         #region Generators
@@ -59,11 +59,11 @@ namespace DotNetSqlGenerator.Library
             for (int i = 0; i < T.Columns.Count(); i++)
             {
                 c = T.Columns.Skip(i).First();
-                sql.Append(c.Name + " = " + generateValues.ForColumn(c) + ((i < T.Columns.Count() - 1) ? ", " : string.Empty));
+                sql.Append(c.Name + " = " + GenerateValue.ForColumn(c) + ((i < T.Columns.Count() - 1) ? ", " : string.Empty));
             }
 
             c = T.Columns.Skip(whereColumn).First();
-            sql.Append(" WHERE " + c.Name + " = " + generateValues.ForColumn(c) + ";");
+            sql.Append(" WHERE " + c.Name + " = " + GenerateValue.ForColumn(c) + ";");
 
             return sql.ToString();
         }
@@ -191,7 +191,7 @@ namespace DotNetSqlGenerator.Library
                 comma = (i < T.Columns.Count() - 1) ? ", " : string.Empty;
                 Column c = T.Columns.Skip(i).First();
                 fields.Append(c.Name + comma);
-                values.Append(generateValues.ForColumn(c) + comma);
+                values.Append(GenerateValue.ForColumn(c) + comma);
             }
             return new string[] { fields.ToString(), values.ToString() };
         }

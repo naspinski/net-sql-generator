@@ -15,11 +15,11 @@ namespace DotNetSqlGenerator.Library
         protected IDbConnection Connection;
         protected string ConnectionString;
         public DbProvider DatabaseProvider;
-        public GenerateSql generateSql;
+        public GenerateSql Generate;
 
         public SqlGenerator()
         {
-            generateSql = new GenerateSql();
+            Generate = new GenerateSql();
         }
         
         public void Dispose()
