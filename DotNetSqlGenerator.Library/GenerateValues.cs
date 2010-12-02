@@ -7,7 +7,7 @@ namespace DotNetSqlGenerator.Library
     /// <summary>
     /// Generates random values for use in the queries
     /// </summary>
-    public static class GenerateValues
+    public class GenerateValues
     {
         #region Randoms
 

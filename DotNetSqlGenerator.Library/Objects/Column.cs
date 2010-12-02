@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Data;
+using DotNetSqlGenerator.Library.Interfaces;
 
 namespace DotNetSqlGenerator.Library.Objects
 {
     /// <summary>
     /// Holds information about a column, such as data types, name, limit and if it is nullable or not
     /// </summary>
-    public class Column
+    public class Column : IColumn
     {
         public string Name {get; private set;}
         public SqlDbType SqlType { get; private set; }
@@ -14,13 +15,9 @@ namespace DotNetSqlGenerator.Library.Objects
         public bool NotNull { get; protected set; }
         public int Limit { get; private set; }
 
-        //remove
-        public string TestData { get; set; }
-
         public Column(string name, string datatype)
         {
             NotNull = true;
-            TestData = "?";
             Limit = -1;
             Name = name;
             string dt = datatype.Split(new string[] {"(",")"}, StringSplitOptions.RemoveEmptyEntries)[0].Trim();

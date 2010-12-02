@@ -205,7 +205,7 @@ namespace DotNetSqlGenerator.Library.DbProviders.PostgreSQL
         /// <returns>Table requested</returns>
         public Table GetTable(string tablename)
         {
-            return new Table(this, tablename);
+            return new PgTable(this, tablename);
         }
 
         /// <summary>
