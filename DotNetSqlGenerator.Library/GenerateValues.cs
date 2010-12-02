@@ -9,6 +9,13 @@ namespace DotNetSqlGenerator.Library
     /// </summary>
     public class GenerateValues
     {
+        private Random Rand;
+
+        public GenerateValues(Random rand)
+        {
+            Rand = rand;
+        }
+
         #region Randoms
 
         /// <summary>
@@ -16,15 +23,14 @@ namespace DotNetSqlGenerator.Library
         /// </summary>
         /// <param name="limit">max length of string, default is 255</param>
         /// <returns>random string</returns>
-        public static string String(int limit = 255)
+        public string String(int limit = 255)
         {
             //added more spaces so there will be higher chance of spacing words to be more realistic
             string legalCharacters = "                 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";//,.;:!@#$%^&*()_+=-";
             StringBuilder s = new StringBuilder();
-            Random rand = new Random();
-            limit = rand.Next(1, limit); //gets a random length for the string
+            limit = Rand.Next(1, limit); //gets a random length for the string
 
-            for (int i = 0; i < limit; i++) s.Append(legalCharacters[rand.Next(0, legalCharacters.Length)]);
+            for (int i = 0; i < limit; i++) s.Append(legalCharacters[Rand.Next(legalCharacters.Length)]);
             
             return s.ToString();
         }
@@ -34,19 +40,19 @@ namespace DotNetSqlGenerator.Library
         /// </summary>
         /// <param name="max">maximum value, this is both upper and lower bounds</param>
         /// <returns>random integer</returns>
-        public static int Integer(int max = Int16.MaxValue)
+        public int Integer(int max = Int16.MaxValue)
         {
             max = max > Int16.MaxValue ? Int16.MaxValue : max;
-            return new Random().Next(-max, max);
+            return Rand.Next(-max, max);
         }
 
         /// <summary>
         /// gets a string represntation of a binary number
         /// </summary>
         /// <returns>binary in string form</returns>
-        public static string Binary(int length = 8)
+        public string Binary(int length = 8)
         {            
-            int decNum = new Random().Next(1000, int.MaxValue);
+            int decNum = Rand.Next(1000, int.MaxValue);
             return Convert.ToString(decNum, 2).Substring(0, length);
         }
 
@@ -54,20 +60,19 @@ namespace DotNetSqlGenerator.Library
         /// generates a random date
         /// </summary>
         /// <returns>random date</returns>
-        public static DateTime Date()
+        public DateTime Date()
         {
             DateTime start = new DateTime(1995, 1, 1);
             int range = ((TimeSpan)(DateTime.Today - start)).Days;
-            Random rand = new Random();
-            start.AddDays(rand.Next(range));
-            return start.AddSeconds(rand.Next(86400));
+            start.AddDays(Rand.Next(range));
+            return start.AddSeconds(Rand.Next(86400));
         }
 
         /// <summary>
         /// generates a random time of day
         /// </summary>
         /// <returns>random time of day</returns>
-        public static string Time()
+        public string Time()
         {
             return Quote(Date().TimeOfDay.ToString());
         }
@@ -76,9 +81,9 @@ namespace DotNetSqlGenerator.Library
         /// generates a random bit
         /// </summary>
         /// <returns>1 or 0</returns>
-        public static int Bit()
+        public int Bit()
         {
-            return new Random().Next() % 2 == 0 ? 1 : 0;
+            return Rand.Next() % 2 == 0 ? 1 : 0;
         }
 
         /// <summary>
@@ -86,17 +91,17 @@ namespace DotNetSqlGenerator.Library
         /// </summary>
         /// <param name="c">column to make a random value for</param>
         /// <returns>string version of the value</returns>
-        public static string ForColumn(Column c)
+        public string ForColumn(Column c)
         {
             // switch statement won't work here
-            if (c.DotNetType == typeof(String)) return GenerateValues.Quote(GenerateValues.String((c.Limit > -1 ? c.Limit : 255)));
+            if (c.DotNetType == typeof(String)) return GenerateValues.Quote(String((c.Limit > -1 ? c.Limit : 255)));
             else if (c.DotNetType == typeof(Int32) || c.DotNetType == typeof(Int16) || c.DotNetType == typeof(Int64) ||
                 c.DotNetType == typeof(Double) || c.DotNetType == typeof(Single) || c.DotNetType == typeof(Decimal))
-                return GenerateValues.Integer().ToString();
-            else if (c.DotNetType == typeof(DateTime)) return GenerateValues.Quote(GenerateValues.Date().ToString());
-            else if (c.DotNetType == typeof(Byte[])) return Quote(GenerateValues.Binary());
-            else if (c.DotNetType == typeof(TimeSpan)) return GenerateValues.Time();
-            else if (c.DotNetType == typeof(Boolean)) return Quote(GenerateValues.Bit().ToString());
+                return Integer().ToString();
+            else if (c.DotNetType == typeof(DateTime)) return Quote(Date().ToString());
+            else if (c.DotNetType == typeof(Byte[])) return Quote(Binary());
+            else if (c.DotNetType == typeof(TimeSpan)) return Time();
+            else if (c.DotNetType == typeof(Boolean)) return Quote(Bit().ToString());
             else throw new Exception("problem making value for column: " + c.Name + " type: " + c.SqlType.ToString());
         }
 
