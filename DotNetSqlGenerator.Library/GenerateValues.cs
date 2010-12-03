@@ -60,12 +60,12 @@ namespace DotNetSqlGenerator.Library
         /// generates a random date
         /// </summary>
         /// <returns>random date</returns>
-        public DateTime Date()
+        public DateTime Date(int start_year = 1995)
         {
-            DateTime start = new DateTime(1995, 1, 1);
+            DateTime start = new DateTime(start_year, 1, 1);
             int range = ((TimeSpan)(DateTime.Today - start)).Days;
-            start.AddDays(Rand.Next(range));
-            return start.AddSeconds(Rand.Next(86400));
+            return  start.AddDays(Rand.Next(range))
+                .AddSeconds(Rand.Next(86400));
         }
 
         /// <summary>
